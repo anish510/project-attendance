@@ -14,6 +14,8 @@ def login(request):
         password = request.POST.get('password')
         user =  User.objects.filter(email_address = email,password = password)
         if user.exists():
+            user=user.first()
+            print(user)
             return render(request,'home.html', {'user':user})
         else:
             messages.error(request,"Invalid Credentials")
@@ -54,6 +56,8 @@ def register(request):
                     address = address,
                     role = role)
                     user.save()
+                    print(user.password)
+                    print(password)
                     return render(request,'login.html')
         else:
             messages.error(request,"Password does not match")

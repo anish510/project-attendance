@@ -3,11 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Employee Attendance</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 </head>
 <body>
    
     <h1>Welcome {{user.first_name}}</h1>
+    <h2>Employee Attendance</h2>
+    <form id="attendanceForm">
+        <label for="punchInTime">Punch In:</label>
+        <input type="text" id="punchInTime" name="punchInTime" class="datetime-picker">
+        <button type="button" onclick="recordPunchIn()">Punch In</button>
+        <br><br>
+
+        <label for="breakInTime">Break In:</label>
+        <input type="text" id="breakInTime" name="breakInTime" class="datetime-picker">
+        <button type="button" onclick="recordBreakIn()">Break In</button>
+        <br><br>
+
+        <label for="breakOutTime">Break Out:</label>
+        <input type="text" id="breakOutTime" name="breakOutTime" class="datetime-picker">
+        <button type="button" onclick="recordBreakOut()">Break Out</button>
+        <br><br>
+
+        <label for="punchOutTime">Punch Out:</label>
+        <input type="text" id="punchOutTime" name="punchOutTime" class="datetime-picker">
+        <button type="button" onclick="recordPunchOut()">Punch Out</button>
+        <br><br>
+
+        <!-- <input type="submit" value="Submit Attendance"> -->
+    </form>
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+        flatpickr(".datetime-picker", {
+            enableTime: true,
+            dateFormat: "Y-m-d H:i",
+            time_24hr: true,
+        });
+
+        // Your JavaScript functions for recording events (recordPunchIn(), recordBreakIn(), etc.) go here.
+    </script>
    
 </body>
 </html>
