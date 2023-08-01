@@ -11,6 +11,9 @@
     <h1>Welcome {{user.first_name}}{{user.id}}</h1>
     <h2>Employee Attendance</h2>
     {% if request.session.user_id%}
+    <p><a href = "{%url 'recordsheet' %}">Show Attendance</a></p>
+
+
         <form method = "post" action = "{%url 'punch' %}">
             {% csrf_token %}
 

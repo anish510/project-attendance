@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from entry.models import *
 from django.contrib import messages
 from django.contrib.auth import logout
+import datetime
 # from django.contrib.auth.decorators import login_required
 
 
@@ -111,6 +112,25 @@ def punch(request):
     else:
         messages.error(request,"Unsuccessful")
         return render(request,'home.html')
-                                               
+#to display the data of the user according to the date passed
+def recordsheet(request,user_id):
+    if not request.session.get('user_id'):
+        return redirect('login') 
+    user = get_object_or_404(User,id = user_id)
+    if request.method == "POST":
+        date = request.POST.get('date')
+        selected_date = datetime.datetime.strptime(date, '%Y-%m-%d').date()
         
+        attendance = Attendance.objects.filter(user = user,date = selected_date)
+        
+        context = {
+            'user':user,
+            'selected_date':date,
+            'attendance_record':attendance,
+        }
+        
+        return render(request,'recordsheet.html',context)
+    else:
+        messages.error(request,"Unsuccessful")
+        return render(request,'recordsheet.html')
       
