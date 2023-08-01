@@ -2,6 +2,9 @@ from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from entry.models import *
 from django.contrib import messages
+from django.contrib.auth import logout
+
+
 
 # Create your views here.
 
@@ -64,3 +67,25 @@ def register(request):
             return redirect('register')
             
     return render(request,'register.html')
+
+def logout(request):
+    # request.session.clear()
+    return redirect('login')
+
+def punch(request):
+    if request.method == "POST":
+        date = request.POST.get('date')
+        start_time = request.POST.get('start_time')
+        end_time = request.POST.get('end_time')
+        description = request.POST.get('description')
+        user_id = request.POST.get('user_id')
+        user = User.objects.get(id = user_id)
+        entry = Attendance.objects.create(
+            date = date,
+            start_time = start_time,
+            end_time = end_time,
+            description = description,
+            user = user)
+        entry.save()
+        return redirect('home')
+        

@@ -10,7 +10,9 @@
    
     <h1>Welcome {{user.first_name}}</h1>
     <h2>Employee Attendance</h2>
-    <form id="attendanceForm">
+    <form method = "post" action = "{%url 'punch' %}">
+        {% csrf_token %}
+
         <label for="punchInTime">Punch In:</label>
         <input type="text" id="punchInTime" name="punchInTime" class="datetime-picker">
         <button type="button" onclick="recordPunchIn()">Punch In</button>
@@ -31,8 +33,12 @@
         <button type="button" onclick="recordPunchOut()">Punch Out</button>
         <br><br>
 
-        <!-- <input type="submit" value="Submit Attendance"> -->
+        <input type="submit" value="Submit Attendance">
+        
     </form>
+    <p><a href = 'logout'>Logout</a></p>
+
+    
 
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script>
