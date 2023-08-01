@@ -8,35 +8,48 @@
 </head>
 <body>
    
-    <h1>Welcome {{user.first_name}}</h1>
+    <h1>Welcome {{user.first_name}}{{user.id}}</h1>
     <h2>Employee Attendance</h2>
-    <form method = "post" action = "{%url 'punch' %}">
-        {% csrf_token %}
+    {% if request.session.user_id%}
+        <form method = "post" action = "{%url 'punch' %}">
+            {% csrf_token %}
 
-        <label for="punchInTime">Punch In:</label>
-        <input type="text" id="punchInTime" name="punchInTime" class="datetime-picker">
-        <button type="button" onclick="recordPunchIn()">Punch In</button>
-        <br><br>
+            <input type="hidden" id="user_id" name="user_id" value="{{ user.id}}">
 
-        <label for="breakInTime">Break In:</label>
-        <input type="text" id="breakInTime" name="breakInTime" class="datetime-picker">
-        <button type="button" onclick="recordBreakIn()">Break In</button>
-        <br><br>
+            <label for = 'date'>Date</label>
+            <input type = "date" id = "date" name = "date" class = "date-picker"><br><br>
 
-        <label for="breakOutTime">Break Out:</label>
-        <input type="text" id="breakOutTime" name="breakOutTime" class="datetime-picker">
-        <button type="button" onclick="recordBreakOut()">Break Out</button>
-        <br><br>
+            <label for="punchInTime">Punch In:</label>
+            <input type="time" id="punchInTime" name="punchInTime" class = "time-picker">
+            <button type="button" onclick="recordPunchIn()">Punch In</button>
+            <br><br>
 
-        <label for="punchOutTime">Punch Out:</label>
-        <input type="text" id="punchOutTime" name="punchOutTime" class="datetime-picker">
-        <button type="button" onclick="recordPunchOut()">Punch Out</button>
-        <br><br>
+            <label for="breakInTime">Break In:</label>
+            <input type="time" id="breakInTime" name="breakInTime" class = "time-picker">
+            <button type="button" onclick="recordBreakIn()">Break In</button>
+            <br><br>
 
-        <input type="submit" value="Submit Attendance">
-        
-    </form>
-    <p><a href = 'logout'>Logout</a></p>
+            <label for="breakOutTime">Break Out:</label>
+            <input type="time" id="breakOutTime" name="breakOutTime" class = "time-picker">
+            <button type="button" onclick="recordBreakOut()">Break Out</button>
+            <br><br>
+
+            <label for="punchOutTime">Punch Out:</label>
+            <input type="time" id="punchOutTime" name="punchOutTime" class = "time-picker">
+            <button type="button" onclick="recordPunchOut()">Punch Out</button>
+            <br><br>
+
+            <input type="submit" value="Submit Attendance">
+            
+        </form>
+    {%endif%}
+    <p><a href = "{%url 'logout_out' %}">Logout</a></p>
+
+    {%if messages%}
+        {%for message in messages%}
+            <p>{{message}}</p>
+        {%endfor%}
+    {%endif%}
 
     
 
@@ -47,6 +60,7 @@
             dateFormat: "Y-m-d H:i",
             time_24hr: true,
         });
+       
 
         // Your JavaScript functions for recording events (recordPunchIn(), recordBreakIn(), etc.) go here.
     </script>

@@ -51,6 +51,8 @@ class User(models.Model):
     
 class Attendance(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    
     date = models.DateField()
     punch_in = models.TimeField()
     punch_out = models.TimeField()

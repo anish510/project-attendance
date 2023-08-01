@@ -1,15 +1,22 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,get_object_or_404
 from django.http import HttpResponse
 from entry.models import *
 from django.contrib import messages
 from django.contrib.auth import logout
+# from django.contrib.auth.decorators import login_required
+
+
+
 
 
 
 # Create your views here.
-
 def home(request):
-    return render(request,'home.html')
+    user =  User.objects.all()
+    # print(3232323232323)
+    # user = request.session.get('user_id')
+    # print(777777777777777777,user) 
+    return render(request,'home.html',{'user':user})
 
 def login(request):
     if request.method == 'POST':
@@ -18,7 +25,8 @@ def login(request):
         user =  User.objects.filter(email_address = email,password = password)
         if user.exists():
             user=user.first()
-            print(user)
+            print(22222222222,user.id)
+            request.session['user_id'] = user.id
             return render(request,'home.html', {'user':user})
         else:
             messages.error(request,"Invalid Credentials")
@@ -59,8 +67,7 @@ def register(request):
                     address = address,
                     role = role)
                     user.save()
-                    print(user.password)
-                    print(password)
+                   
                     return render(request,'login.html')
         else:
             messages.error(request,"Password does not match")
@@ -68,24 +75,42 @@ def register(request):
             
     return render(request,'register.html')
 
-def logout(request):
-    # request.session.clear()
+def logout_out(request):
+    if 'user_id' in request.session:
+        del request.session['user_id']  # Delete the user_id from the session
     return redirect('login')
+
 
 def punch(request):
     if request.method == "POST":
-        date = request.POST.get('date')
-        start_time = request.POST.get('start_time')
-        end_time = request.POST.get('end_time')
-        description = request.POST.get('description')
-        user_id = request.POST.get('user_id')
-        user = User.objects.get(id = user_id)
-        entry = Attendance.objects.create(
-            date = date,
-            start_time = start_time,
-            end_time = end_time,
-            description = description,
-            user = user)
-        entry.save()
-        return redirect('home')
         
+        
+        user_id = request.POST.get('user_id')
+        user = get_object_or_404(User,id = user_id)
+        
+        date = request.POST.get('date')
+        punchin = request.POST.get('punchInTime')
+        punchout = request.POST.get('punchOutTime')
+        breakin = request.POST.get('breakInTime')
+        breakout = request.POST.get('breakOutTime')
+        print(999999999999999,user)
+        
+        
+        
+        attendance = Attendance.objects.create(
+            user =user,
+            punch_in = punchin,
+            punch_out = punchout,
+            break_in = breakin,
+            break_out = breakout,
+            date = date,
+            )
+        attendance.save()
+        messages.success(request,"Successful")
+        return render(request,'home.html', {'user':user})   
+    else:
+        messages.error(request,"Unsuccessful")
+        return render(request,'home.html')
+                                               
+        
+      
