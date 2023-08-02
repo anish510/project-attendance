@@ -5,11 +5,6 @@ from datetime import datetime,timedelta
 from django .contrib.auth.hashers import make_password ,check_password
 # from django.contrib.auth.decorators import login_required
 
-
-
-
-
-
 # Create your views here.
 def home(request):
     user =  User.objects.all()
@@ -21,20 +16,16 @@ def login(request):
         email = request.POST.get('email')
         password = request.POST.get('password')
         
-        
         user =  User.objects.filter(email_address = email)
         if user.exists():
             user=user.first()
             if check_password(password,user.password):
-                
                 request.session['user_id'] = user.id
                 return render(request,'home.html', {'user':user})
         else:
             messages.error(request,"Invalid Credentials")
             return redirect('login')
         
-        
- 
     return render(request,'login.html')
 
 def register(request):
@@ -88,12 +79,9 @@ def punch(request):
         user_id = request.POST.get('user_id')
         user = get_object_or_404(User,id = user_id)
         select_category = request.POST.get('category')
-        print(333333333333333333,select_category)
-        
         date = request.POST.get('date')
         time_str = request.POST.get('time')
         time_obj = datetime.strptime(time_str, '%H:%M').time()
-
 
         attendance, created = Attendance.objects.get_or_create(user=user, date=date)
 
@@ -113,33 +101,26 @@ def punch(request):
         messages.error(request,"Unsuccessful")
         return render(request,'home.html')
     
-
-    
 def recordsheet(request,user_id):
     if request.method == "POST":
         user = get_object_or_404(User,pk = user_id)
         date = request.POST.get('date')
         input_date = datetime.strptime(date, '%Y-%m-%d').date()
-        
-        
-        
-       
-            
+    
         attendance_records  = Attendance.objects.filter(user = user, date = input_date)
-        
         
         total_work_hours = 0
         for attendance in attendance_records:
             if attendance.punch_in and attendance.punch_out:
                 punch_in_time = datetime.combine(attendance.date, attendance.punch_in)
                 punch_out_time = datetime.combine(attendance.date, attendance.punch_out)
-                
                 time_difference = punch_out_time - punch_in_time
+                print(time_difference)
                 total_work_hours += time_difference.total_seconds() / 3600
         
-        
-        
-        return render(request,'recordsheet.html',{'attendance':attendance_records , 'user':user,'date':date,'total_work_hours': total_work_hours})
+        return render(request,'recordsheet.html',{'attendance':attendance_records , 
+                                                  'user':user,'date':date,
+                                                  'total_work_hours': total_work_hours})
     else:
         messages.error(request,"Unsuccessful")
         return render(request,'recordsheet.html')
