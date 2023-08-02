@@ -1,28 +1,62 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Employee Attendance</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-</head>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://getbootstrap.com/docs/5.3/assets/css/docs.css" rel="stylesheet">
+    <title>Bootstrap Example</title>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+  </head>
+  <style>
+    .dropdown {
+        position: relative;
+      }
+      
+      .d-flex {
+        display: flex;
+      }
+      
+  </style>
 <body>
    
     <h1>Welcome {{user.first_name}}{{user.id}}</h1>
     <h2>Employee Attendance</h2>
     {% if request.session.user_id%}
-    <p><a href = "{%url 'recordsheet' %}">Show Attendance</a></p>
+    <p><a href = "{%url 'recordsheet' user.id %}">Show Attendance</a></p>
 
+    
+    <form method = "post" action = "{%url 'punch' %}">
+        {% csrf_token %}
+        <input type="hidden" id="user_id" name="user_id" value="{{ user.id}}">
+        <div class="container-fluid">
+            <div class="d-flex align-items-center">
+              <div class="mr-2">
+                <label for="date">Date</label>
+                <input type="date" id="date" name="date" class="date-picker form-control">
 
-        <form method = "post" action = "{%url 'punch' %}">
-            {% csrf_token %}
+                <label for="time">Time</label>
+                <input type="time" id="time" name="time" class="time-picker form-control">
 
-            <input type="hidden" id="user_id" name="user_id" value="{{ user.id}}">
+              </div>
+              <div class = "col-3" >
+              <label for = "category">categories</label>
+              <select id="category" name="category" class="form-control" >
+                <option value="punch_in">Punch In</option>
+                <option value="break_in">Break In</option>
+                <option value="break_out">Break Out</option>
+                <option value="punch_out">Punch Out</option>
+              </select>
+              <button type = 'submit'>Submit</button>
+            </div>
+                
+            
+          </div>
+          
+          
+        
 
-            <label for = 'date'>Date</label>
-            <input type = "date" id = "date" name = "date" class = "date-picker"><br><br>
-
-            <label for="punchInTime">Punch In:</label>
+            <!-- <label for="punchInTime">Punch In:</label>
             <input type="time" id="punchInTime" name="punchInTime" class = "time-picker">
             <button type="button" onclick="recordPunchIn()">Punch In</button>
             <br><br>
@@ -43,10 +77,12 @@
             <br><br>
 
             <input type="submit" value="Submit Attendance">
-            
-        </form>
+             --> 
+              <br><br>
+             <p><a href = "{%url 'logout_out' %}">Logout</a></p>
+        </div></form>
     {%endif%}
-    <p><a href = "{%url 'logout_out' %}">Logout</a></p>
+   
 
     {%if messages%}
         {%for message in messages%}
@@ -57,15 +93,20 @@
     
 
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <!-- Add this inside the <head> tag -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <!-- Add this at the end of the <body> tag, just before the closing </body> tag -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
     <script>
         flatpickr(".datetime-picker", {
             enableTime: true,
             dateFormat: "Y-m-d H:i",
             time_24hr: true,
         });
-       
-
-        // Your JavaScript functions for recording events (recordPunchIn(), recordBreakIn(), etc.) go here.
     </script>
    
 </body>

@@ -54,13 +54,24 @@ class Attendance(models.Model):
 
     
     date = models.DateField()
-    punch_in = models.TimeField()
-    punch_out = models.TimeField()
-    break_in = models.TimeField()
-    break_out = models.TimeField()
+    punch_in = models.TimeField(null = True)
+    punch_out = models.TimeField(null = True)
+    break_in = models.TimeField(null = True)
+    break_out = models.TimeField(null = True)
+    
     
     def __str__(self):
         return self.user.first_name + ' ' + self.user.last_name + ' ' + str(self.date)
     
+    # @property
+    # def total_work(self):
+    #     from datetime import datetime
+    #     if self.punch_in and self.punch_out:
+    #         punch_in_time = datetime.combine(self.date, self.punch_in)
+    #         punch_out_time = datetime.combine(self.date, self.punch_out)
+    #         time_difference = punch_out_time - punch_in_time
+    #         total_hours = time_difference.total_seconds() / 3600
+    #         return round(total_hours, 2)
+    #     return 0  # If either punch_in or p
     
     

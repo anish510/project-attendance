@@ -6,8 +6,12 @@
     <title>Document</title>
 </head>
 <body>
-
-   <form method = "post" action = "{%url 'recordsheet' %}" >
+    {%if message %}
+       {%for message in messages%}
+        <p>{{message}}</p>
+         {%endfor%}
+    {%endif%}
+   <form method = "post" >
     {% csrf_token %}
 
     <input type="hidden" id="user_id" name="user_id" value="{{ user.id}}">
@@ -16,14 +20,32 @@
 
     <input type="submit" value="search">
 
-    {%if selected_date%}
-    <h2>Attendance Records for {{ user.first_name }} {{ user.last_name }} on {{ selected_date }}</h2>
-    <ul>
-        {% for record in attendance_records %}
-            <li>Punch In: {{ record.punch_in }} | Punch Out: {{ record.punch_out }}</li>
-        {% endfor %}
-    </ul>
-{% endif %}
+    <h1>Attendance Record Sheet for {{ user.first_name}} on {{ date }}</h1>
+
+    {% if attendance %}
+        <ul>
+            {% for record in attendance %}
+                <li>
+                    Date: {{ record.date }}<br>
+                    Punch-In: {{ record.punch_in }}<br>
+                    Punch-Out: {{ record.punch_out }}<br>
+                    Break-In: {{ record.break_in }}<br>
+                    Break-Out: {{ record.break_out }}<br>
+                    
+                </li>
+                
+                            
+                                Total Working Hours: {{ total_work_hours }}
+                            
+                
+
+                
+            {% endfor %}
+            
+        </ul>
+    {% else %}
+        <p>No attendance records found for the selected date.</p>
+    {% endif %}
 
     
 
