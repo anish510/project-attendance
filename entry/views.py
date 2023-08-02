@@ -115,7 +115,6 @@ def recordsheet(request,user_id):
                 punch_in_time = datetime.combine(attendance.date, attendance.punch_in)
                 punch_out_time = datetime.combine(attendance.date, attendance.punch_out)
                 time_difference = punch_out_time - punch_in_time
-                print(time_difference)
                 total_work_hours += time_difference.total_seconds() / 3600
         
         return render(request,'recordsheet.html',{'attendance':attendance_records , 

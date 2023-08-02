@@ -6,11 +6,13 @@
     <title>Document</title>
 </head>
 <body>
+
     {%if message %}
        {%for message in messages%}
         <p>{{message}}</p>
          {%endfor%}
     {%endif%}
+
    <form method = "post" >
     {% csrf_token %}
 
@@ -31,24 +33,13 @@
                     Punch-Out: {{ record.punch_out }}<br>
                     Break-In: {{ record.break_in }}<br>
                     Break-Out: {{ record.break_out }}<br>
-                    
-                </li>
-                
-                            
-                                Total Working Hours: {{ total_work_hours }}
-                            
-                
-
-                
+                    Total Working Hours: {{ total_work_hours }}    
+                </li>     
             {% endfor %}
-            
         </ul>
     {% else %}
         <p>No attendance records found for the selected date.</p>
     {% endif %}
-
-    
-
 </form>
     
 </body>
