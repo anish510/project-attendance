@@ -26,8 +26,18 @@
 
     {% if attendance %}
         <ul>
-            {% for record in attendance %}
+            {% for record in timesheet %}
                 <li>
+                    time : {{record.entry_time}} 
+                    entr_type: {{record.entry_type}}
+                   
+                </li>     
+            {% endfor %}
+            worked_hr : {{worked_hours}}
+        </ul>
+        <ul>
+            {% for record in attendance %}
+                <li>{{record}}
                     Date: {{ record.date }}<br>
                     Punch-In: {{ record.punch_in }}<br>
                     Punch-Out: {{ record.punch_out }}<br>

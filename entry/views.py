@@ -83,7 +83,14 @@ def punch(request):
         time_str = request.POST.get('time')
         time_obj = datetime.strptime(time_str, '%H:%M').time()
 
-        attendance, created = Attendance.objects.get_or_create(user=user, date=date)
+        attendance, _ = Attendance.objects.get_or_create(user=user, date=date)
+        timesheet, _ = Timesheet.objects.get_or_create(user=user,date=date)
+        punch_in_time = datetime.combine(datetime.strptime(date,"%Y-%m-%d").date(),time_obj)
+        
+        time_entries = TimesheetEntries.objects.create(timesheet= timesheet,entry_time = punch_in_time,entry_type = select_category)
+        
+        
+        
 
         if select_category == 'punch_in':
             attendance.punch_in = time_obj
@@ -109,17 +116,22 @@ def recordsheet(request,user_id):
     
         attendance_records  = Attendance.objects.filter(user = user, date = input_date)
         
-        total_work_hours = 0
-        for attendance in attendance_records:
-            if attendance.punch_in and attendance.punch_out:
-                punch_in_time = datetime.combine(attendance.date, attendance.punch_in)
-                punch_out_time = datetime.combine(attendance.date, attendance.punch_out)
-                time_difference = punch_out_time - punch_in_time
-                total_work_hours += time_difference.total_seconds() / 3600
+        timesheet = Timesheet.objects.filter(user = user, date = date).first()
+        timesheet_entries = timesheet.timesheetentries_set.all()
+        worked_hours = timesheet.worked_hr()
+        # total_work_hours = 0
+        # for attendance in attendance_records:
+        #     if attendance.punch_in and attendance.punch_out:
+        #         punch_in_time = datetime.combine(attendance.date, attendance.punch_in)
+        #         punch_out_time = datetime.combine(attendance.date, attendance.punch_out)
+        #         time_difference = punch_out_time - punch_in_time
+        #         total_work_hours += time_difference.total_seconds() / 3600
         
         return render(request,'recordsheet.html',{'attendance':attendance_records , 
                                                   'user':user,'date':date,
-                                                  'total_work_hours': total_work_hours})
+                                                #   'total_work_hours': total_work_hours,
+                                                    'timesheet':timesheet_entries,
+                                                    'worked_hours':worked_hours})
     else:
         messages.error(request,"Unsuccessful")
         return render(request,'recordsheet.html')
