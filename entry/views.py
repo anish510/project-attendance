@@ -53,12 +53,12 @@ def register(request):
                     password = hashed_password,
                     first_name = firstname,
                     last_name = lastname,
-                    gender_field = gender,
+                    
                     date_of_birth= dob,
                     phone_number = phonenumber,
                     email_address = email,
                     address = address,
-                    role = role)
+                    )
                     user.save()
                    
                     return render(request,'login.html')
@@ -135,6 +135,26 @@ def recordsheet(request,user_id):
     else:
         messages.error(request,"Unsuccessful")
         return render(request,'recordsheet.html')
+#Display User under the age of 20 only
+
+def age(request):
+    from django.utils import timezone
+    from datetime import timedelta
+    
+    current_date = timezone.now().date()
+    print(111111111111111,current_date)
+    print(22222222222222,User.date_of_birth)
+    print(44444444444444,current_date - timedelta(days=360*20))
+    print(555555555555555,timedelta(360*20))
+    
+    
+    under_20 = User.objects.filter(date_of_birth__gt = current_date - timedelta(days = 360 * 20))
+    
+    print(333333333333333,under_20)
+    
+    return render(request,'under_20.html',{'under_20':under_20})
+    
+    
     
     
     

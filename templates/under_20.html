@@ -1,0 +1,19 @@
+<!-- under_20.html -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Users Under 20</title>
+</head>
+<body>
+    <h1>Users Under 20</h1>
+    <ul>
+        {% for user in under_20 %}
+        <li>
+            Name: {{ user.first_name }} {{ user.last_name }}<br>
+            Date of Birth: {{ user.date_of_birth }}
+        </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
